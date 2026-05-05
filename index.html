@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0">
+    <title>Unity Web Player | Desafios Do Conhecimento HTML</title>
+
+    <!-- Google Analytics 4 — change G-XXXXXXXXXX to your Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TE7Q2NDCL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-7TE7Q2NDCL');
+    </script>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            background: url('Build/background.png');
+            background-size: cover;
+        }
+        #unity-wrapper {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #unity-canvas {
+            display: block;
+            background: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Wrapper is what centers the canvas -->
+    <div id="unity-wrapper">
+        <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
+    </div>
+
+    <script src="Build/DesafiosDoConhecimento.loader.js"></script>
+    <script>
+    const canvas = document.querySelector("#unity-canvas");
+    const ASPECT = 16 / 9;
+
+    function fitCanvas() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // Largest 16:9 rect that fits in the viewport (no cropping)
+      let w = vw;
+      let h = vw / ASPECT;
+      if (h > vh) { h = vh; w = vh * ASPECT; }
+
+      canvas.style.width  = Math.floor(w) + "px";
+      canvas.style.height = Math.floor(h) + "px";
+    }
+
+    window.addEventListener("resize", fitCanvas);
+    fitCanvas();
+
+    createUnityInstance(canvas, {
+      arguments: [],
+      dataUrl: "Build/DesafiosDoConhecimento.data.unityweb",
+      frameworkUrl: "Build/DesafiosDoConhecimento.framework.js.unityweb",
+      codeUrl: "Build/DesafiosDoConhecimento.wasm.unityweb",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Sesi-RS",
+      productName: "Desafios Do Conhecimento HTML",
+      productVersion: "1.0.0",
+      matchWebGLToCanvasSize: false,
+      //devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+    }).then((unityInstance) => {
+    }).catch((message) => {
+        alert(message);
+    });
+    </script>
+</body>
+</html>
