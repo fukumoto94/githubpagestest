@@ -1,9 +1,9 @@
 const cacheName = "SESI-Livronautas-1.0";
 const contentToCache = [
-    "Build/d7391b27f2855938e984cc56b98677a1.loader.js",
-    "Build/d59879d5c3cc5f01dc3480cf5161d1b2.framework.js.unityweb",
-    "Build/a4bab33f0994ef17ebd21f715bd2dfc9.data.unityweb",
-    "Build/10e9bff4265fca22b8d73961b6a8a4b7.wasm.unityweb",
+    "Build/7743ce649f29502d9af8cd6799abb6b3.loader.js",
+    "Build/b4787d2aea85dd093c8a34602aaa1a51.framework.js.unityweb",
+    "Build/8b4ac47db922f3aeb21e23801d02df76.data.unityweb",
+    "Build/fa8d4f58509f8d8a876d687693c7d81e.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
