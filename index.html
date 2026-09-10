@@ -1,111 +1,111 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | Livronautas</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <link rel="manifest" href="manifest.webmanifest">
-  </head>
-  <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas" width=1280 height=720 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"> </div>
-    </div>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+    <title>Unity Web Player | Biblioteca Mágica</title>
+
+    <!-- Google Analytics 4 — change G-XXXXXXXXXX to your Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TE7Q2NDCL"></script>
     <script>
-      window.addEventListener("load", function () {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker.register("ServiceWorker.js");
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
         }
-      });
 
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var warningBanner = document.querySelector("#unity-warning");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/7743ce649f29502d9af8cd6799abb6b3.loader.js";
-      var config = {
-        arguments: [],
-        dataUrl: buildUrl + "/8b4ac47db922f3aeb21e23801d02df76.data.unityweb",
-        frameworkUrl: buildUrl + "/b4787d2aea85dd093c8a34602aaa1a51.framework.js.unityweb",
-        codeUrl: buildUrl + "/fa8d4f58509f8d8a876d687693c7d81e.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "SESI",
-        productName: "Livronautas",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-        // errorHandler: function(err, url, line) {
-        //    alert("error " + err + " occurred at line " + line);
-        //    // Return 'true' if you handled this error and don't want Unity
-        //    // to process it further, 'false' otherwise.
-        //    return true;
-        // },
-      };
-
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-      }
-
-
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
+        gtag('js', new Date());
+        gtag('config', 'G-7TE7Q2NDCL');
     </script>
-  </body>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: url("Build/background.png") center center / cover no-repeat;
+            touch-action: none;
+            overscroll-behavior: none;
+        }
+
+        #unity-wrapper {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #unity-canvas {
+            display: block;
+            background: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Wrapper is what centers the canvas -->
+    <div id="unity-wrapper">
+        <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
+    </div>
+
+    <script src="Build/BibliotecaMagicaWeb.loader.js"></script>
+
+    <script>
+        const canvas = document.querySelector("#unity-canvas");
+        const ASPECT = 16 / 9;
+
+        function fitCanvas() {
+            const viewport = window.visualViewport;
+
+            const vw = viewport ? viewport.width : window.innerWidth;
+            const vh = viewport ? viewport.height : window.innerHeight;
+
+            let width = vw;
+            let height = width / ASPECT;
+
+            if (height > vh) {
+                height = vh;
+                width = height * ASPECT;
+            }
+
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+        }
+
+        window.addEventListener("resize", fitCanvas);
+
+        window.addEventListener("orientationchange", () => {
+            setTimeout(fitCanvas, 100);
+        });
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", fitCanvas);
+        }
+
+        fitCanvas();
+
+        createUnityInstance(canvas, {
+            arguments: [],
+            dataUrl: "Build/BibliotecaMagicaWeb.data.unityweb",
+            frameworkUrl: "Build/BibliotecaMagicaWeb.framework.js.unityweb",
+            codeUrl: "Build/BibliotecaMagicaWeb.wasm.unityweb",
+            streamingAssetsUrl: "StreamingAssets",
+            companyName: "SESI-RS",
+            productName: "Biblioteca Mágica",
+            productVersion: "1.0.0",
+            matchWebGLToCanvasSize: true,
+            //devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+        }).then((unityInstance) => {
+            fitCanvas();
+        }).catch((message) => {
+            alert(message);
+        });
+    </script>
+</body>
 </html>
