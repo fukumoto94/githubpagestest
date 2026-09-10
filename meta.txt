@@ -1,0 +1,1 @@
+This folder contains the WebGL template with GA4 gtag.js support.
