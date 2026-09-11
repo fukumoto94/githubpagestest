@@ -45,6 +45,49 @@
             display: block;
             background: #000;
         }
+
+        #unity-loading-bar {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            color: #fff;
+            background: #004f9f;
+            font-family: Arial, Helvetica, sans-serif;
+            transition: opacity 200ms ease;
+        }
+
+        #unity-loading-bar.is-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #unity-loading-title {
+            font-size: clamp(22px, 4vw, 40px);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        #unity-progress-bar-empty {
+            width: min(280px, 60vw);
+            height: 14px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        #unity-progress-bar-full {
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: #fff;
+            transition: width 100ms linear;
+        }
     </style>
 </head>
 
@@ -52,12 +95,20 @@
     <!-- Wrapper is what centers the canvas -->
     <div id="unity-wrapper">
         <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
+        <div id="unity-loading-bar" role="progressbar" aria-label="Carregando" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div id="unity-loading-title">Biblioteca Mágica</div>
+            <div id="unity-progress-bar-empty">
+                <div id="unity-progress-bar-full"></div>
+            </div>
+        </div>
     </div>
 
     <script src="Build/BibliotecaMagicaWeb.loader.js"></script>
 
     <script>
         const canvas = document.querySelector("#unity-canvas");
+        const loadingBar = document.querySelector("#unity-loading-bar");
+        const progressBarFull = document.querySelector("#unity-progress-bar-full");
         const ASPECT = 16 / 9;
 
         function fitCanvas() {
@@ -101,8 +152,14 @@
             productVersion: "1.0.0",
             matchWebGLToCanvasSize: true,
             //devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+        }, (progress) => {
+            const percentage = Math.round(progress * 100);
+            progressBarFull.style.width = percentage + "%";
+            loadingBar.setAttribute("aria-valuenow", percentage);
         }).then((unityInstance) => {
             fitCanvas();
+            loadingBar.classList.add("is-hidden");
+            loadingBar.addEventListener("transitionend", () => loadingBar.remove(), { once: true });
         }).catch((message) => {
             alert(message);
         });
