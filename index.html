@@ -4,7 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>Unity Web Player | Livronautas</title>
+    <title>Unity Web Player | Biblioteca Mágica</title>
+
+    <!-- Google Analytics 4 — change G-XXXXXXXXXX to your Measurement ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7TE7Q2NDCL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-7TE7Q2NDCL');
+    </script>
 
     <style>
         html,
@@ -14,7 +27,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background: #003f7f;
+            background: url("Build/background.png") center center / cover no-repeat;
             touch-action: none;
             overscroll-behavior: none;
         }
@@ -79,17 +92,18 @@
 </head>
 
 <body>
+    <!-- Wrapper is what centers the canvas -->
     <div id="unity-wrapper">
-        <canvas id="unity-canvas" width=1280 height=720 tabindex="-1"></canvas>
+        <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
         <div id="unity-loading-bar" role="progressbar" aria-label="Carregando" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div id="unity-loading-title">Livronautas</div>
+            <div id="unity-loading-title">Biblioteca Mágica</div>
             <div id="unity-progress-bar-empty">
                 <div id="unity-progress-bar-full"></div>
             </div>
         </div>
     </div>
 
-    <script src="Build/7743ce649f29502d9af8cd6799abb6b3.loader.js"></script>
+    <script src="Build/BibliotecaMagicaWeb.loader.js"></script>
 
     <script>
         const canvas = document.querySelector("#unity-canvas");
@@ -99,14 +113,15 @@
 
         function fitCanvas() {
             const viewport = window.visualViewport;
-            const viewportWidth = viewport ? viewport.width : window.innerWidth;
-            const viewportHeight = viewport ? viewport.height : window.innerHeight;
 
-            let width = viewportWidth;
+            const vw = viewport ? viewport.width : window.innerWidth;
+            const vh = viewport ? viewport.height : window.innerHeight;
+
+            let width = vw;
             let height = width / ASPECT;
 
-            if (height > viewportHeight) {
-                height = viewportHeight;
+            if (height > vh) {
+                height = vh;
                 width = height * ASPECT;
             }
 
@@ -115,6 +130,7 @@
         }
 
         window.addEventListener("resize", fitCanvas);
+
         window.addEventListener("orientationchange", () => {
             setTimeout(fitCanvas, 100);
         });
@@ -127,14 +143,15 @@
 
         createUnityInstance(canvas, {
             arguments: [],
-            dataUrl: "Build/2d9baeb7c56c32ff5d34a555b887b713.data.unityweb",
-            frameworkUrl: "Build/b4787d2aea85dd093c8a34602aaa1a51.framework.js.unityweb",
-            codeUrl: "Build/fa8d4f58509f8d8a876d687693c7d81e.wasm.unityweb",
+            dataUrl: "Build/BibliotecaMagicaWeb.data.unityweb",
+            frameworkUrl: "Build/BibliotecaMagicaWeb.framework.js.unityweb",
+            codeUrl: "Build/BibliotecaMagicaWeb.wasm.unityweb",
             streamingAssetsUrl: "StreamingAssets",
-            companyName: "SESI",
-            productName: "Livronautas",
-            productVersion: "1.0",
+            companyName: "SESI-RS",
+            productName: "Biblioteca Mágica",
+            productVersion: "1.0.0",
             matchWebGLToCanvasSize: true,
+            //devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
         }, (progress) => {
             const percentage = Math.round(progress * 100);
             progressBarFull.style.width = percentage + "%";
